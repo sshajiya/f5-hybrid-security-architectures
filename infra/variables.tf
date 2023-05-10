@@ -57,4 +57,14 @@ variable "int_address_prefixes" {
   default     = ["10.1.20.0/24", "10.1.120.0/24"]
   description = "Internal subnet address prefixes"
 }
+variable "nap" { 
+  type = bool 
+  default = true 
+  description = "Set to true if your deployment includes NGINX App Protect" 
+} 
 
+variable "nic" { 
+  type = bool 
+  default = false 
+  description = "Set to true if your deployment includes NGINX Ingress"
+ }
