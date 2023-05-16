@@ -96,6 +96,10 @@ output "nic" {
 output "nap" { 
   value = var.nap 
 }
+output "bigip" { 
+  value = var.bigip 
+}
+
 
 
 
