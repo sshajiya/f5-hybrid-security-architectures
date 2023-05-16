@@ -68,3 +68,8 @@ variable "nic" {
   default = false 
   description = "Set to true if your deployment includes NGINX Ingress"
  }
+variable "bigip" { 
+  type = bool 
+  default = false 
+  description = "Set to true if your deployment includes BIGIP"
+ }
