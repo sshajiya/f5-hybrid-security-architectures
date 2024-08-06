@@ -9,7 +9,7 @@ on:
 jobs:
   terraform_infra:
     name: "AWS Infra"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
     #needs: terraform_eks
     defaults:
       run:
