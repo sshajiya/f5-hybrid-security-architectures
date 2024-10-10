@@ -1,6 +1,6 @@
 #Global
 project_prefix = "test-hybrid-arch"
-resource_owner = "tester"
+resource_owner = "sshajiya"
 
 #AWS INFRA
 aws_region     = "ap-south-1"
