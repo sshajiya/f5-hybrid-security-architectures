@@ -1,11 +1,15 @@
 #Mandatory
 #BIG-IP
-f5_ami_search_name = "*BIGIP*16.1*PAYG*Best*Plus 25Mbps-*"
+f5_ami_search_name = "F5 BIGIP-16.1.3* PAYG-Adv WAF Plus 25Mbps*"
 aws_secretmanager_auth = false
 
-#Provisioning set to nominal or none
-asm = "nominal"
-apm = "none"
+#LTM
+create_ltm_config = false
+ltm_config_payload = "ltm-config.json"
+
+#AWAF
+create_awaf_config = true
+awaf_config_payload = "awaf-config.json"
 
 #Optional
 
