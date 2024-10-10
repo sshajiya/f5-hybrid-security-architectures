@@ -1,7 +1,7 @@
 #XC Global
 api_url = "https://treino.console.ves.volterra.io/api"
 xc_tenant = "treino-ufahspac"
-xc_namespace = "demo"
+xc_namespace = "api-sec"
 
 #XC LB
 app_domain = "hybrid-arch-t1.f5-hyd-xcdemo.com"
