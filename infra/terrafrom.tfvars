@@ -1,5 +1,5 @@
 #Global
-project_prefix = "sdc-org"
+project_prefix = "hybridp1"
 resource_owner = "sshajiya"
 
 #AWS INFRA
