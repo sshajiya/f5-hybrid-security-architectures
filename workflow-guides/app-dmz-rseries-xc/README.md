@@ -2,6 +2,8 @@
 
 # Table of Contents
 
+- [Extending App DMZ to Global Service Tier with F5 rSeries and Distributed Cloud Services](#extending-app-dmz-to-global-service-tier-with-f5-rseries-and-distributed-cloud-services)
+- [Table of Contents](#table-of-contents)
 - [Overview](#overview)
 - [Setup](#setup)
 - [1. Initial preparations](#1-initial-preparations)
@@ -31,32 +33,35 @@
 
 # Overview
 
-This guide provides the steps for a comprehensive Demilitarized Zone (DMZ) setup using F5 Distributed Cloud Services (XC) environment and F5 rSeries appliance.
+This guide provides the steps for a comprehensive Demilitarized Zone (DMZ) setup using F5 Distributed Cloud Services (XC) environment, F5 rSeries appliance and VMware.
 
 **Challenges**
 
 DMZ is a physical or logical subnetwork that contains and exposes an organization's external-facing services to an untrusted network, typically the internet. It serves as a buffer zone between the secure internal network and external networks, providing an additional layer of security to ensure that potentially malicious traffic does not reach critical internal systems directly.
 
 To make data center applications accessible on the internet, IT teams traditionally handle several networking operations, including:
-* **NAT** (Network Address Translation): Converting public IP addresses to private server IPs.
-* **DNS Resolution**: Ensuring domain names resolve to the correct IP addresses.
-* **Load Balancing**: Distributes incoming application traffic across multiple servers to ensure reliability, optimal resource utilization, and high availability
-* **Security Operations**: Deploying protections such as Web Application Firewalls (WAF) and Distributed Denial of Service (DDoS) mitigation.
+
+- **NAT** (Network Address Translation): Converting public IP addresses to private server IPs.
+- **DNS Resolution**: Ensuring domain names resolve to the correct IP addresses.
+- **Load Balancing**: Distributes incoming application traffic across multiple servers to ensure reliability, optimal resource utilization, and high availability
+- **Security Operations**: Deploying protections such as Web Application Firewalls (WAF) and Distributed Denial of Service (DDoS) mitigation.
 
 ![rseris](./assets/rseries-before-v2.png)
 
 Handling these operations at the App Services tier and on a per-application basis adds complexity, making application delivery more challenging, such as:
+
 - Management and "stitching" of multiple app DMZ environments at scale
 - Standardized consistent policy across overall data center deployments
 - Handling unwanted traffic (bad actors and bots) at the global services tier
 
-These challenges compound into serious problems when considering modern microservices app architectures, in particular **handling unwanted/unfiltered traffic** to app services and API endpoints, and **having no uniform security or visibility** when managing multiple sites (multiple datacenters and/or clouds). 
+These challenges compound into serious problems when considering modern microservices app architectures, in particular **handling unwanted/unfiltered traffic** to app services and API endpoints, and **having no uniform security or visibility** when managing multiple sites (multiple datacenters and/or clouds).
 
-**Solution** 
+**Solution**
 
-F5 Distributed Cloud services (XC) simplify these challenges by providing centralized security services, which include volumetric DDoS protection, API protection, and Bot mitigation as part of WAF configurations at the network edge. This is possible through the installation and operation of a Customer Edge (CE) in various on-premises environments, such as VMware, OpenShift, Nutanix, or F5’s own rSeries appliances.
+Distributed Cloud Services simplify these challenges by providing centralized security services, which include volumetric DDoS protection, API protection, and Bot mitigation as part of WAF configurations at the network edge. This is possible through the installation and operation of a Customer Edge (CE) in various on-premises environments, such as VMware, OpenShift, Nutanix, or F5’s own rSeries appliances.
 
-(1) **Global Services Tier** 
+(1) **Global Services Tier**
+
 - Keeps unwanted traffic off your infrastructure
 - Broad spectrum volumetric DDoS mitigation (L3/L)
 - Anti-abuse including bot/fraud detection and mitigation
@@ -65,33 +70,34 @@ F5 Distributed Cloud services (XC) simplify these challenges by providing centra
 - Standard company app security policy / policies used by all apps
 
 (2) **App Services Tier**
+
 - Retains important / integrated security controls and policy including automation and CI/CD pipelines at your app
 - Workload-specific security policy definitions & enforcement
 - Closest to the application & Line of Business / security teams managing specific app services
 
 ![rseris](./assets/diagram-overview-2.png)
 
-# Setup 
+# Setup
 
-The objective of this setup is to create a secure DMZ environment for the application using the F5 rSeries hardware platform that provides modern topology for flexible and scalable networking connectivity, enhanced performance, and protection. The diagram below shows high-level components and their interactions. The setup includes two Data Centers, each has an origin pool that connects to the XC site installed in F5 rSeries. The XC site is connected to the BIG-IP where a Virtual Server is configured. Our sample app (Arcadia) is inside the Virtual Server Pool of the BIG-IP. The application is protected by Web Application Firewall (WAF), DDoS Protection, Bot Protection, and API Discovery.
+The objective of this setup is to create a secure DMZ environment for the application using the F5 rSeries hardware platform that provides modern topology for flexible and scalable networking connectivity, enhanced performance, and protection and VMware. The diagram below shows high-level components and their interactions. The setup includes two Data Centers, each has an origin pool that connects to the F5 Distributed Cloud site deployed in VMware. The Distributed Cloud site is connected to the BIG-IP where a Virtual Server is configured. Our sample app (Arcadia) is inside the Virtual Server Pool of the BIG-IP. The application is protected by Web Application Firewall (WAF), DDoS Protection, Bot Protection, and API Discovery.
 
 The setup flow includes the following:
 
 - Configuration of BIG-IP on F5 rSeries;
-- Configuration of Data Centers with Customer Edge (CE) Sites on F5 rSeries;
+- Configuration of Data Centers with Customer Edge (CE) Sites on F5 rSeries and VMware;
 - Demo application deployment in the Data Center;
-- XC Cloud Secure Mesh Site configuration and combining them into a single Virtual Site;
+- F5 Distributed Cloud Secure Mesh Site configuration and combining them into a single Virtual Site;
 - Application exposure to the Internet using HTTP Load Balancer;
 - Application protection with Web Application Firewall (WAF), DDoS Protection, Bot Protection, and API Discovery;
 - Upgrading the solution with a second Data Center and configuring HTTP Load Balancer for a complete DMZ configuration.
-  
+
 # 1. Initial preparations
 
 ## 1.1 Requirements
 
 The following components are required to complete the setup:
 
-- Access to the [XC Cloud](https://cloud.f5.com) with the following services enabled:
+- Access to the [Distributed Cloud Services](https://cloud.f5.com) with the following services enabled:
   - ability to create Sites
   - Bot Protect
   - DDoS Protect
@@ -99,6 +105,7 @@ The following components are required to complete the setup:
   - Api Discovery
 - F5 rSeries: 5600 / 5800 / 5900/ 10600 / 10800 / 10900 / 12600 / 12800 / 12900
 - Ubuntu VM with access to the F5 rSeries network
+- VMware vCenter
 - Domain Name
 
 The following diagram shows the components and network configuration of the setup:
@@ -174,7 +181,7 @@ Next, proceed to `Self IPs` and click `Create`.
 This will open the configuration form. Fill in the following fields:
 
 - `Name`: 10.5.11.20
-- `IP Address`: 10.5.11.20 (or any other IP address you want to assign in XC SLI network)
+- `IP Address`: 10.5.11.20 (or any other IP address you want to assign in F5 Distributed Cloud SLI network)
 - `Netmask`: 255.255.255.0
 - `VLAN / Tunnel`: select the VLAN you create in the previous step
 
@@ -184,7 +191,7 @@ Click `Finished` as soon as the fields are filled out.
 
 ### 1.3.3 Create BIG-IP Virtual Server
 
-In this section, we will configure the BIG-IP Virtual Server to expose the application to the XC SLI network. We will create a pool with the application VM as a member and then create a Virtual Server to route the traffic to the pool.
+In this section, we will configure the BIG-IP Virtual Server to expose the application to the Distributed Cloud SLI network. We will create a pool with the application VM as a member and then create a Virtual Server to route the traffic to the pool.
 
 Open the BIG-IP interface and navigate to the `Local Traffic` tab. Click on the `Pools` and then click on the `Create` button.
 
@@ -223,13 +230,13 @@ Fill in the required fields:
 
 ![bigip](./assets/bigip_vs_pool.png)
 
-The application is now exposed to the XC SLI network. You can try to access the application using the IP address of the SLI network.
+The application is now exposed to the Distributed Cloud SLI network. You can try to access the application using the IP address of the SLI network.
 
 # 2. Configure Environment
 
 ## 2.1 Deploy CE Tenant on F5 rSeries
 
-In this section, we will create a Secure Mesh Site in the XC Cloud. We will provide only the basic information required to create the site. The detailed information can be found here: [Deploy Secure Mesh Site v2 on F5 BIG-IP rSeries Appliance (ClickOps)](https://docs.cloud.f5.com/docs-v2/multi-cloud-network-connect/how-to/site-management/deploy-sms-rseries#procedure).
+In this section, we will create a Secure Mesh Site in the Distributed Cloud Services. We will provide only the basic information required to create the site. The detailed information can be found here: [Deploy Secure Mesh Site v2 on F5 BIG-IP rSeries Appliance (ClickOps)](https://docs.cloud.f5.com/docs-v2/multi-cloud-network-connect/how-to/site-management/deploy-sms-rseries#procedure).
 
 ### 2.1.1 Create Secure Mesh Site in XC Cloud
 
@@ -320,7 +327,6 @@ In the opened form give virtual site a name that we specified as [label](#151-cr
 # 3. Expose Application to the Internet
 
 ![rseris](./assets/diagram-before.png)
-
 
 ## 3.1 Create the HTTP Load Balancer
 
@@ -550,7 +556,7 @@ Select **IP address of Origin Server on given Sites** as Origin Server type and 
 
 ![Second DC](./assets/dc2_configure_origin.png)
 
-Create a second origin server for the second BigIP instance. In our case, the IP address is ** **10.6.11.21**
+Create a second origin server for the second BigIP instance. In our case, the IP address is \*\* **10.6.11.21**
 
 Type in the **8080** origin server port.
 
