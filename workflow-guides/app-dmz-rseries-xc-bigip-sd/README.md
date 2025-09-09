@@ -1,6 +1,9 @@
 ## F5 Distributed Cloud Service Discovery for BIG-IP Customer Edge (CE) Sites
 
 ## Table of Contents
+
+- [F5 Distributed Cloud Service Discovery for BIG-IP Customer Edge (CE) Sites](#f5-distributed-cloud-service-discovery-for-big-ip-customer-edge-ce-sites)
+- [Table of Contents](#table-of-contents)
 - [Overview](#overview)
 - [1. Prerequisites](#1-prerequisites)
 - [2. BigIP Service Discovery](#2-bigip-service-discovery)
@@ -14,7 +17,7 @@
 
 This guide will walk you through the steps to configure and use the BIG-IP Service Discovery for the BIG-IP TMOS deployed on the F5 rSeries device.
 
-The BIG-IP Service Discovery is a feature that allows you to automatically discover app services in an existing BIG-IP configuration. The BIG-IP Service Discovery uses the F5 XC Cloud CE node to communicate with the BIG-IP deployment and discover the Virtual Servers. This allows you to easily configure the HTTP and HTTPS load balancing and expose your applications to the internet.
+The BIG-IP Service Discovery is a feature that allows you to automatically discover app services in an existing BIG-IP configuration. The BIG-IP Service Discovery uses the F5 Distributed Cloud CE node to communicate with the BIG-IP deployment and discover the Virtual Servers. This allows you to easily configure the HTTP and HTTPS load balancing and expose your applications to the internet.
 
 In the diagram below you can see the overview of the solution:
 
