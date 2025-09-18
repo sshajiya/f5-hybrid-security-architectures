@@ -543,7 +543,7 @@ This will send a request to the application and trigger the API Discovery. It wi
 version: '3'
 services:
   openbanking-traffic:
-    image: ghcr.io/yoctoalex/arcadia-finance/openbanking-traffic:v0.0.2
+    image: public.ecr.aws/r2r2l6v3/arcadia-finance/openbanking-traffic:v0.0.2
     environment:
       BASE_URL: https://{{your-domain-here}}/openbanking
 ```
