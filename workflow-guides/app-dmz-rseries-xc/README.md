@@ -14,10 +14,9 @@
     - [1.3.2 Configure BIG-IP on F5 rSeries](#132-configure-big-ip-on-f5-rseries)
     - [1.3.3 Create BIG-IP Virtual Server](#133-create-big-ip-virtual-server)
 - [2. Configure Environment](#2-configure-environment)
-  - [2.1 Deploy CE Tenant on F5 rSeries](#21-deploy-ce-tenant-on-f5-rseries)
-    - [2.1.1 Create Secure Mesh Site in XC Cloud](#211-create-secure-mesh-site-in-xc-cloud)
-    - [2.1.2 Deploy CE Tenant on F5 rSeries](#212-deploy-ce-tenant-on-f5-rseries)
-    - [2.1.2 Configure Second rSeries device](#212-configure-second-rseries-device)
+  - [2.1 Deploy CE Tenant on VMware](#21-deploy-ce-tenant-on-vmware)
+    - [2.1.1 Create Secure Mesh Site in F5 Distributed Cloud](#211-create-secure-mesh-site-in-f5-distributed-cloud)
+    - [2.1.2 Configure the Second cluster](#212-configure-the-second-cluster)
   - [2.2 Configure XC Virtual Site](#22-configure-xc-virtual-site)
 - [3. Expose Application to the Internet](#3-expose-application-to-the-internet)
   - [3.1 Create the HTTP Load Balancer](#31-create-the-http-load-balancer)
@@ -234,79 +233,112 @@ The application is now exposed to the Distributed Cloud SLI network. You can try
 
 # 2. Configure Environment
 
-## 2.1 Deploy CE Tenant on F5 rSeries
+## 2.1 Deploy CE Tenant on VMware
 
-In this section, we will create a Secure Mesh Site in the Distributed Cloud Services. We will provide only the basic information required to create the site. The detailed information can be found here: [Deploy Secure Mesh Site v2 on F5 BIG-IP rSeries Appliance (ClickOps)](https://docs.cloud.f5.com/docs-v2/multi-cloud-network-connect/how-to/site-management/deploy-sms-rseries#procedure).
+In this section, we will create a Secure Mesh Site v2 in the F5 Distributed Cloud and deploy it in VMware Datacenter. The Secure Mesh Site will connect to the BIG-IP Virtual Server we created in the previous section.
 
-### 2.1.1 Create Secure Mesh Site in XC Cloud
+### 2.1.1 Create Secure Mesh Site in F5 Distributed Cloud
 
-Open XC Cloud and navigate to the `Multi-Cloud Network Connect`. In the left navigation pane, click on `Site Management` and then click on `Secure Mesh Sites v2`. In the `Secure Mesh Sites v2` page, click on the `Add Secure Mesh Site` button.
+Open F5 Distributed Cloud Console and navigate to the `Multi-Cloud Network Connect`. In the left navigation pane, click on `Site Management` and then click on `Secure Mesh Sites v2`. In the `Secure Mesh Sites v2` page, click on the `Add Secure Mesh Site` button.
 
-![rseries-sms](./assets/rseries-xc-navigate.png)
+![vmware-01](./assets/vmware-01.png)
 
 Fill the name of the site and assign custom label `dc == dc1-dmz`.
 
-![rseries-sms](./assets/rseries-xc-name.png)
+![vmware-02](./assets/vmware-02.png)
 
-Select the provider as `F5 rSeries`. Leave other fields as default.
+Select the provider as `VMWare`. Leave other fields as default.
 
-![rseries-sms](./assets/rseries-xc-provider.png)
+![vmware-03](./assets/vmware-03.png)
 
-Click on the `Save and Exit` button to apply the changes.
+Click on the `Add Secure Mesh Site` button to apply the changes.
 
-![rseries-sms](./assets/rseries-xc-save.png)
+![vmware-04](./assets/vmware-04.png)
 
 Open the action menu of the created site and click on `Download Image`. Save the image to your local machine, you will need it later.
 
-![rseries-sms](./assets/rseries-xc-image.png)
+![vmware-05](./assets/vmware-07.png)
 
-Open the action menu again and click on `Generate Node Token`.
+While image is downloading, open the action menu again and click on `Generate Node Token`.
 
-![rseries-sms](./assets/rseries-xc-token.png)
+![vmware-06](./assets/vmware-06.png)
 
-From the `Generate Node Token` dialog, copy the token.
+Click `Copy Token` from the `Generate Node Token` dialog to save the token to your clipboard.
 
-![rseries-sms](./assets/rseries-xc-token-copy.png)
+![vmware-07](./assets/vmware-05.png)
 
-### 2.1.2 Deploy CE Tenant on F5 rSeries
+Open VMware vCenter or ESXi (in our case) and start the deployment of the downloaded image. Create a new VM and select `Deploy a virtual machine from an OVF or OVA file`. Click `Next` to proceed.
 
-Sign in to the F5 rSeries interface and navigate to the `TENANT MANAGEMENT` tab. Click on the `Tenant Images`. Then click on the `Upload` button.
+![vmware-08](./assets/vmware-08.png)
 
-![rseries-sms](./assets/rseries-tenant.png)
+Type in the name of the VM and select the downloaded image. Then click `Next` to proceed.
 
-Select the image you downloaded in the previous step and click `Open`.
+![vmware-09](./assets/vmware-09.png)
 
-![rseries-sms](./assets/rseries-upload.png)
+Select the storage and click `Next`.
 
-Navigate to `Tenant Deployments` and click on the `Add` button.
+![vmware-10](./assets/vmware-10.png)
 
-![rseries-sms](./assets/rseries-create.png)
+Now select the Outside network, disk provisioning as `Thin`. Oprtionally you can select `Power on automatically` and then click `Next`.
 
-Fill in the required fields:
+![vmware-11](./assets/vmware-11.png)
 
-- `Name`: rseries-dmz-site
-- `Type`: Generic
-- `Image`: select the image you uploaded
-- `IP Address`: IP address of the SLO interface
-- `Gateway`: Gateway IP address
-- `VLANs`: check the `XC-SLO` and `XC-SLI` VLANs
-- `vCPUs`: 4
-- `Virtual Disk Size`: 50 GB
-- `Metadata`: paste the token you copied in the previous step and VLAN ID in the following format: `[primary-vlan:SLO token:your_token_from_xc_cloud]`
+Type in the node name, token you copied earlier, admin password and network settings. Click `Next` to proceed.
 
-Click on the `Save & Close` button to apply the changes.
+![vmware-12](./assets/vmware-12.png)
 
-![rseries-sms](./assets/rseries-details_part_1.png)
+Review the configuration and click `Finish` to deploy the VM.
 
-![rseries-sms](./assets/rseries-details_part_2.png)
+![vmware-13](./assets/vmware-13.png)
 
-Go back to the XC Cloud and navigate to the `Sites`. Wait until the site is deployed and provisioned.
+Open VM settings and add a new network adapter. Select the `Inside Network` network and click `OK` to apply the changes.
 
-![rseries-sms](./assets/rseries-confirm.png)
+![vmware-14](./assets/vmware-14.png)
 
-If your network does not use DHCP, you may need to configure the network settings manually. Once the site status changes to "Ready," go to the site details and complete the network configuration.
+After the VM is deployed and powered on, you can access the console to verify that the site is connected to the XC Cloud. It may take a few minutes for the site to connect. Site status will change to `Online` once the site is ready.
 
-### 2.1.2 Configure Second rSeries device
+![vmware-15](./assets/vmware-15.png)
+
+Now, open the action menu of the created site and click on `Manage Configuration` to open the site details.
+
+![vmware-16](./assets/vmware-16.png)
+
+Click on the `Edit Configuration` button to enable the editing mode.
+
+![vmware-17](./assets/vmware-17.png)
+
+Find the `node-0` in the list and click on the `Edit` button.
+
+![vmware-18](./assets/vmware-18.png)
+
+In the `Interfaces` section, click `Add Item` to add a new interface.
+
+![vmware-19](./assets/vmware-19.png)
+
+Type in the interface name.
+
+![vmware-20](./assets/vmware-20.png)
+
+Then select `VLAN Interface` as the interface type, parent interface as `esp224` and VLAN as `511`. Set the static IP address. 
+
+NOTE: Network settings can be different in your environment.
+
+![vmware-21](./assets/vmware-21.png)
+
+Select `Site Local Inside (Local VRF)` as the VRF and click on the `Apply` button to apply the changes.
+
+![vmware-22](./assets/vmware-22.png)
+
+Check the interface is added and click on the `Apply` button to apply the changes.
+
+![vmware-23](./assets/vmware-23.png)
+
+Click `Save Secure Mesh Site` to save the configuration.
+
+![vmware-24](./assets/vmware-24.png)
+
+
+### 2.1.2 Configure the Second cluster
 
 Repeat the steps from the [1.3 Deploy and Configure BIG-IP on F5 rSeries](#13-deploy-and-configure-big-ip-on-f5-rseries) section and from the [2.1 Deploy CE Tenant on F5 rSeries](#21-deploy-ce-tenant-on-f5-rseries) section to configure the second rSeries device.
 
