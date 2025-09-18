@@ -32,7 +32,7 @@
 
 # Overview
 
-This guide provides steps for a comprehensive Demilitarized Zone (DMZ) setup using the F5 Distributed Cloud Services (XC) environment, the F5 rSeries appliance, and VMware.
+This guide provides steps for a comprehensive Demilitarized Zone (DMZ) setup using the F5 Distributed Cloud Services (XC) environment, the F5 Hardware (F5 rSeries), and VMware.
 
 **Challenges**
 
@@ -57,7 +57,7 @@ These challenges compound into serious problems for modern microservices applica
 
 **Solution**
 
-Distributed Cloud Services simplify these challenges by providing centralized security services, which include volumetric DDoS protection, API protection, and bot mitigation as part of WAF configurations at the network edge. This is enabled by installing and operating a Customer Edge (CE) in various on‑premises environments, such as VMware, OpenShift, Nutanix, or F5’s own rSeries appliances.
+Distributed Cloud Services simplify these challenges by providing centralized security services, which include volumetric DDoS protection, API protection, and bot mitigation as part of WAF configurations at the network edge. This is enabled by installing and operating a Customer Edge (CE) in various on‑premises environments, such as VMware, OpenShift, Nutanix.
 
 (1) **Global Services Tier**
 
@@ -78,7 +78,7 @@ Distributed Cloud Services simplify these challenges by providing centralized se
 
 # Setup
 
-The objective of this setup is to create a secure DMZ environment for the application using the F5 rSeries hardware platform—which provides a modern topology for flexible and scalable networking connectivity, enhanced performance, and protection—and VMware. The diagram below shows high-level components and their interactions. The setup includes two data centers, each with an origin pool that connects to the F5 Distributed Cloud site deployed in VMware. The Distributed Cloud site is connected to the BIG-IP, where a Virtual Server is configured. Our sample app (Arcadia) is inside the BIG-IP Virtual Server pool. The application is protected by a Web Application Firewall (WAF), DDoS Protection, Bot Protection, and API Discovery.
+The objective of this setup is to create a secure DMZ environment for the application using the F5 hardware platform, which provides a modern topology for flexible and scalable network connectivity, enhanced performance, and protection, together with VMware. The diagram below shows high-level components and their interactions. The setup includes two data centers, each with an origin pool that connects to the F5 Distributed Cloud site deployed in VMware. The Distributed Cloud site is connected to the BIG-IP, where a Virtual Server is configured. Our sample app (Arcadia) is inside the BIG-IP Virtual Server pool. The application is protected by a Web Application Firewall (WAF), DDoS Protection, Bot Protection, and API Discovery.
 
 The setup flow includes the following:
 
