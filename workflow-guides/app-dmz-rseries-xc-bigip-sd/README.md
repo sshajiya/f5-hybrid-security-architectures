@@ -63,7 +63,7 @@ Enter a name for the Service Discovery. Optionally, add a description.
 
 ![Service Discovery](./assets/xc_sd_create.png)
 
-In the `Where` section, select the `Site` option for the `Virtual-Site or Site or Network` field. Then select your `rSeries CE Site` from the list. Select `Site Local Inside Network` for the `Network` field.
+In the `Where` section, select the `Site` option for the `Virtual-Site or Site or Network` field. Then select your `VMware CE Site` from the list. Select `Site Local Inside Network` for the `Network` field.
 
 ![Service Discovery](./assets/xc_sd_create_where.png)
 
