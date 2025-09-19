@@ -1,8 +1,8 @@
-# Extending App DMZ to Global Service Tier with F5 rSeries and Distributed Cloud Services
+# Extending App DMZ to Global Service Tier with F5 Hardware and Distributed Cloud Services
 
 # Table of Contents
 
-- [Extending App DMZ to Global Service Tier with F5 rSeries and Distributed Cloud Services](#extending-app-dmz-to-global-service-tier-with-f5-rseries-and-distributed-cloud-services)
+- [Extending App DMZ to Global Service Tier with F5 Hardware and Distributed Cloud Services](#extending-app-dmz-to-global-service-tier-with-f5-hardware-and-distributed-cloud-services)
 - [Table of Contents](#table-of-contents)
 - [Overview](#overview)
 - [Setup](#setup)
