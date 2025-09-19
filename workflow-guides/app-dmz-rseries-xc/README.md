@@ -15,7 +15,7 @@
     - [1.3.3 Create BIG-IP Virtual Server](#133-create-big-ip-virtual-server)
 - [2. Configure Environment](#2-configure-environment)
   - [2.1 Deploy CE Tenant on VMware](#21-deploy-ce-tenant-on-vmware)
-    - [2.1.1 Create Secure Mesh Site in F5 Distributed Cloud](#211-create-secure-mesh-site-in-f5-distributed-cloud)
+    - [2.1.1 Create Secure Mesh Site in F5 Distributed Cloud Console](#211-create-secure-mesh-site-in-f5-distributed-cloud-console)
     - [2.1.2 Configure the Second Cluster](#212-configure-the-second-cluster)
   - [2.2 Configure XC Virtual Site](#22-configure-xc-virtual-site)
 - [3. Expose Application to the Internet](#3-expose-application-to-the-internet)
@@ -235,11 +235,11 @@ The application is now exposed to the Distributed Cloud SLI network. You can try
 
 ## 2.1 Deploy CE Tenant on VMware
 
-In this section, we will create a Secure Mesh Site v2 in F5 Distributed Cloud and deploy it in a VMware data center. The Secure Mesh Site will connect to the BIG-IP Virtual Server we created in the previous section.
+In this section, we will create a Secure Mesh Site v2 in F5 Distributed Cloud Console and deploy it in a VMware data center. The Secure Mesh Site will connect to the BIG-IP Virtual Server we created in the previous section.
 
-### 2.1.1 Create Secure Mesh Site in F5 Distributed Cloud
+### 2.1.1 Create Secure Mesh Site in F5 Distributed Cloud Console
 
-Open the F5 Distributed Cloud console and navigate to `Multi-Cloud Network Connect`. In the left navigation pane, click `Site Management`, then click `Secure Mesh Sites v2`. On the `Secure Mesh Sites v2` page, click `Add Secure Mesh Site`.
+Open the Distributed Cloud Console and navigate to `Multi-Cloud Network Connect`. In the left navigation pane, click `Site Management`, then click `Secure Mesh Sites v2`. On the `Secure Mesh Sites v2` page, click `Add Secure Mesh Site`.
 
 ![vmware-01](./assets/vmware-01.png)
 
@@ -295,7 +295,7 @@ Open the VM settings and add a new network adapter. Select the `Inside Network` 
 
 ![vmware-14](./assets/vmware-14.png)
 
-After the VM is deployed and powered on, access the console to verify that the site is connected to the XC Cloud. It may take a few minutes for the site to connect. The site status will change to `Online` once the site is ready.
+After the VM is deployed and powered on, access the console to verify that the site is connected to the Distributed Cloud Services. It may take a few minutes for the site to connect. The site status will change to `Online` once the site is ready.
 
 ![vmware-15](./assets/vmware-15.png)
 
@@ -337,22 +337,21 @@ Click `Save Secure Mesh Site` to save the configuration.
 
 ![vmware-24](./assets/vmware-24.png)
 
-
 ### 2.1.2 Configure the Second Cluster
 
 Repeat the steps from the [1.3 Deploy and Configure BIG-IP on F5 rSeries](#13-deploy-and-configure-big-ip-on-f5-rseries) section and from the [2.1 Deploy CE Tenant on VMware](#21-deploy-ce-tenant-on-vmware) section to configure the second rSeries device.
 
 ## 2.2 Configure XC Virtual Site
 
-To simplify application management, we will create a Virtual Site in the XC Cloud and assign the Secure Mesh Site to it. This allows us to access the application using the Virtual Site name and scale by adding more Secure Mesh Sites in the future.
+To simplify application management, we will create a Virtual Site in the Distributed Cloud Console and assign the Secure Mesh Site to it. This allows us to access the application using the Virtual Site name and scale by adding more Secure Mesh Sites in the future.
 
 ![rseries](./assets/diagram-vsite.png)
 
-Let's start by adding a virtual site. In the F5 Distributed Cloud console, navigate to the **Shared Configuration** service. From there, select **Virtual Sites** and click **Add Virtual Site**.
+Let's start by adding a virtual site. In the F5 Distributed Cloud Console, navigate to the **Shared Configuration** service. From there, select **Virtual Sites** and click **Add Virtual Site**.
 
 ![Virtual Site](./assets/virtual_site_add.png)
 
-In the form, give the virtual site the same name you specified as the [label](#211-create-secure-mesh-site-in-f5-distributed-cloud) for Secure Mesh Sites. Select the **CE** site type. Then add a selector expression specifying the label value, and click **Save and Exit**.
+In the form, give the virtual site the same name you specified as the [label](#211-create-secure-mesh-site-in-f5-distributed-cloud) for Secure Mesh Sites. Select the **CE** site type. Then add a selector expression specifying the label value, and click **Add Virtual site**.
 
 ![Virtual Site](./assets/virtual_site_config.png)
 
@@ -392,9 +391,9 @@ Give the origin pool a name.
 
 Then click **Add Item** to add an origin server.
 
-![HTTP LB](./assets/http_lb_pool_origin.png)
+![HTTP LB](./assets/http_lb_pool_add_server.png)
 
-Select **IP address of Origin Server on given Sites** as the Origin Server type and enter the **10.5.11.20** private IP (your BIG-IP XC interface). Then, in the drop-down menu, select the [Virtual Site](#22-configure-xc-virtual-site) we created earlier. Complete the configuration by clicking **Apply**.
+Select **IP address of Origin Server on given Sites** as the Origin Server type and enter the **10.5.11.20** private IP (your BIG-IP Distributed Cloud Services interface). Then, in the drop-down menu, select the [Virtual Site](#22-configure-xc-virtual-site) we created earlier. Complete the configuration by clicking **Apply**.
 
 ![HTTP LB](./assets/http_lb_pool_details.png)
 
@@ -408,11 +407,11 @@ Scroll down to the **Health Checks** section and click the **Add Item** button t
 
 ![HTTP LB](./assets/http_lb_health_add.png)
 
-Give the health check a name and leave the default settings. Then click **Continue** to save the health check configuration.
+Give the health check a name and leave the default settings. Then click **Add Health Check** to save the health check configuration.
 
 ![HTTP LB](./assets/http_lb_health_details.png)
 
-Scroll down and click **Continue**.
+Scroll down and click **Add Origin Pool**.
 
 ![HTTP LB](./assets/http_lb_pool_save.png)
 
@@ -420,7 +419,7 @@ Scroll down and click **Continue**.
 
 ![HTTP LB](./assets/http_lb_pool_apply.png)
 
-Now that the HTTP Load Balancer is configured, click **Save and Exit** to save it.
+Now that the HTTP Load Balancer is configured, click **Add HTTP Load Balancer** to save it.
 
 ![HTTP LB](./assets/http_lb_save.png)
 
@@ -430,7 +429,7 @@ Now that we have exposed the Virtual Site to the Internet using an HTTP Load Bal
 
 ![rseries](./assets/diagram-waf.png)
 
-To do that, go back to the F5 Distributed Cloud console and select **Manage Configuration** in the service menu of the created HTTP Load Balancer.
+To do that, go back to the Console and select **Manage Configuration** in the service menu of the created HTTP Load Balancer.
 
 ![Configure](./assets/configure_manage.png)
 
@@ -452,11 +451,11 @@ Select **Blocking** mode in the drop-down menu to log and block threats.
 
 ![Configure](./assets/configure_waf_mode.png)
 
-Proceed to **Detection Settings**. Select a **Custom** Security Policy and review its settings. Then scroll down to **Signature-Based Bot Protection** and select **Custom**.
+Proceed to **Security Policy Settings**. Select a **Custom** Security Policy and review its settings. Then scroll down to **Signature-Based Bot Protection** and select **Custom**.
 
 ![Configure](./assets/configure_waf_detection.png)
 
-Finally, configure the **Blocking Response Page** in **Advanced configuration**. Select **Custom** and configure as needed. Click **Continue** to complete WAF configuration and return to the HTTP configuration page.
+Finally, configure the **Blocking Response Page** in **Advanced configuration**. Select **Custom** and configure as needed. Click **Add App Firewall** to complete WAF configuration and return to the HTTP configuration page.
 
 ![Configure](./assets/configure_waf_advanced.png)
 
@@ -474,9 +473,13 @@ Click the **Add Item** button which will open the creation form.
 
 ![Configure](./assets/configure_bot_add_endpoint.png)
 
-Configure the endpoint: give it a name, select the HTTP methods, and specify the endpoint label category. Specify **Authentication** as the flow label category and select **Login** for the flow label. Specify the path prefix **/trading/auth**. Select **Block** for the Bot Mitigation action and save the configuration by clicking **Apply**.
+Configure the endpoint: give it a name, select the HTTP methods, and specify the endpoint label category. Specify **Authentication** as the flow label category and select **Login** for the flow label.
 
 ![Configure](./assets/configure_bot_endpoint_config.png)
+
+Specify the path prefix **/trading/auth**. Select **Block** for the Bot Mitigation action and save the configuration by clicking **Apply**.
+
+![Configure](./assets/configure_bot_endpoint_config1.png)
 
 Take a look at the created App Endpoint and apply its configuration.
 
@@ -496,9 +499,13 @@ In the **API Protection** section, enable API Discovery and enable learning from
 
 ## 4.4 Configure DDoS Protection
 
-Go to the **DoS Protection** section and select serving a JavaScript challenge to suspicious sources. Then select **Custom** for Slow DDoS Mitigation.
+Go to the **DoS Settings** section and select serving a JavaScript challenge to suspicious sources.
 
 ![Configure](./assets/configure_ddos.png)
+
+Then select **Custom** for Slow DDoS Mitigation.
+
+![Configure](./assets/configure_ddos1.png)
 
 ## 4.5 Configure Malicious User and IP Reputation
 
@@ -506,7 +513,7 @@ In the **Common Security Controls** section, enable the IP Reputation service an
 
 ![Configure](./assets/configure_other.png)
 
-The security configuration is complete. Review it and click **Save and Exit**.
+The security configuration is complete. Review it and click **Save HTTP Load Balancer**.
 
 ![Configure](./assets/configure_save.png)
 
@@ -558,9 +565,9 @@ Finally, we will configure the HTTP Load Balancer by creating the second origin 
 
 ![rseris](./assets/diagram-dmz.png)
 
-This setup requires a second data center with the same configuration as the first one. Repeat the steps from [1. Initial preparations](#1-initial-preparations) and [2. Configure Environment](#2-configure-environment) to create a second data center with the same components. Then create a Virtual Site for the second data center as described in [2.2 Configure XC Virtual Site](#22-configure-xc-virtual-site).
+This setup requires a second data center with the same configuration as the first one. Repeat the steps from [1. Initial preparations](#1-initial-preparations) and [2. Configure Environment](#2-configure-environment) to create the second data center with the same components. Then create a Virtual Site for the second data center as described in [2.2 Configure XC Virtual Site](#22-configure-xc-virtual-site).
 
-Once the second data center is ready, proceed with the configuration. Go to the F5 Distributed Cloud console and select **Manage Configuration** in the service menu of the earlier [created HTTP Load Balancer](#31-create-the-http-load-balancer).
+Once the second data center is ready, proceed with the configuration. Go to the Console and select **Manage Configuration** in the service menu of the earlier [created HTTP Load Balancer](#31-create-the-http-load-balancer).
 
 ![Second DC](./assets/dc2_manage.png)
 
@@ -584,17 +591,17 @@ Then click **Add Item** to add an origin server.
 
 ![Second DC](./assets/dc2_add_origin.png)
 
-Select **IP address of Origin Server on given Sites** as the Origin Server type and enter the **10.6.11.20** private IP (your BIG-IP XC interface in the second data center). Then, in the drop-down menu, select the second Virtual Site. Complete the configuration by clicking **Apply**.
+Select **IP address of Origin Server on given Sites** as the Origin Server type and enter the **10.6.11.20** private IP (your BIG-IP Distributed Cloud interface in the second data center). Then, in the drop-down menu, select the second Virtual Site. Complete the configuration by clicking **Apply**.
 
 ![Second DC](./assets/dc2_configure_origin.png)
 
-Create a second origin server for the second BIG-IP instance. In our case, the IP address is **10.6.11.21**.
+Create the second origin server for the second BIG-IP instance. In our case, the IP address is **10.6.11.21**.
 
 Type in the **8080** origin server port.
 
 ![Second DC](./assets/dc2_port.png)
 
-Scroll down and click **Continue**.
+Scroll down and click **Add Origin Pool**.
 
 ![Second DC](./assets/dc2_save_pool.png)
 
@@ -606,10 +613,10 @@ The second configured origin pool will appear on the list.
 
 ![Second DC](./assets/dc2_pool_result.png)
 
-Now that we have added and configured the second origin pool of the HTTP Load Balancer for the second data center, click **Save and Exit** to save it.
+Now that we have added and configured the second origin pool of the HTTP Load Balancer for the second data center, click **Save HTTP Load Balancer** to save it.
 
 # 6. Conclusion
 
-In this guide, we configured a comprehensive DMZ setup using F5 rSeries hardware, BIG-IP, and the F5 XC Cloud environment. We deployed a simple web application, configured BIG-IP and the XC CE Tenant on F5 rSeries, exposed the application to the Internet using an HTTP Load Balancer, and protected the application with WAF, Bot Protection, API Discovery, DDoS Protection, and Malicious User and IP Reputation. We also configured the second data center and added it to the HTTP Load Balancer as a backup origin pool.
+In this guide, we configured a comprehensive DMZ setup using F5 rSeries hardware, BIG-IP, and the F5 Distributed Cloud environment. We deployed a simple web application, configured BIG-IP and the Distributed Cloud CE Tenant on F5 rSeries, exposed the application to the Internet using an HTTP Load Balancer, and protected the application with WAF, Bot Protection, API Discovery, DDoS Protection, and Malicious User and IP Reputation. We also configured the second data center and added it to the HTTP Load Balancer as a backup origin pool.
 
-This setup provides a secure and scalable environment for exposing on‑prem applications to public Internet access, with advanced protection and networking management performed at the network edge using F5 Distributed Cloud Services. The F5 rSeries hardware and F5 XC Cloud environment provide a powerful platform for deploying and managing application networking and security in a scalable and efficient way.
+This setup provides a secure and scalable environment for exposing on‑prem applications to public Internet access, with advanced protection and networking management performed at the network edge using F5 Distributed Cloud Services. The F5 rSeries hardware and F5 Distributed Cloud environment provide a powerful platform for deploying and managing application networking and security in a scalable and efficient way.
