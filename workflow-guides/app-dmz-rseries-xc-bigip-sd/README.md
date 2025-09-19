@@ -36,10 +36,10 @@ This guide assumes that you have already completed [Extending App DMZ to Global 
 
 To complete this guide, you will need the following:
 
-- [F5 Distributed Cloud Account](https://cloud.f5.com/)
+- [F5 Distributed Cloud Services account](https://cloud.f5.com/)
 - F5 rSeries: 5600 / 5800 / 5900 / 10600 / 10800 / 10900 / 12600 / 12800 / 12900
 - [BIG-IP installed on the rSeries device](https://github.com/f5devcentral/f5-hybrid-security-architectures/tree/main/workflow-guides/app-dmz-rseries-xc#13-deploy-and-configure-big-ip-on-f5-rseries)
-- [XC Site installed on the VMware](https://github.com/f5devcentral/f5-hybrid-security-architectures/tree/main/workflow-guides/app-dmz-rseries-xc#21-deploy-ce-tenant-on-vmware)
+- [F5 Distributed Cloud Site installed on the VMware](https://github.com/f5devcentral/f5-hybrid-security-architectures/tree/main/workflow-guides/app-dmz-rseries-xc#21-deploy-ce-tenant-on-vmware)
 - Virtual machine with an NGINX Docker container as a sample application
 - [DNS Zone or domain name](https://docs.cloud.f5.com/docs-v2/dns-management/how-to/manage-dns-zones#create-primary-zone)
 
@@ -49,7 +49,7 @@ The diagram below shows the network configuration of the solution:
 
 ## 2. BIG-IP Service Discovery
 
-The BIG-IP Service Discovery feature automatically detects app services and configures HTTP/HTTPS load balancing for internet exposure. Using the F5 XC Cloud CE node, it communicates with BIG-IP to discover Virtual Servers.
+The BIG-IP Service Discovery feature automatically detects app services and configures HTTP/HTTPS load balancing for internet exposure. Using the F5 Distributed Cloud CE node, it communicates with BIG-IP to discover Virtual Servers.
 
 ![Discovery](./assets/solution_discovery.png)
 
@@ -67,7 +67,7 @@ In the `Where` section, select the `Site` option for the `Virtual-Site or Site o
 
 ![Service Discovery](./assets/xc_sd_create_where.png)
 
-In the `Discovery Method` section, select `Classic BIG-IP Discovery Configuration`. Then click `Add Item`.
+In the `Discovery Method` section, make sure `Classic BIG-IP Discovery Configuration` is selected. Then click `Add Item`.
 
 ![Service Discovery](./assets/xc_sd_add.png)
 
@@ -159,11 +159,11 @@ Enabling a Health Check for the Pool is recommended. Click the dropdown, then `A
 
 ![Pool](./assets/xc_pool_health_add.png)
 
-Enter a name and leave the default values for the Health Check. Then click `Continue`.
+Enter a name and leave the default values for the Health Check. Then click `Add Health Check`.
 
 ![Pool](./assets/xc_pool_health_details.png)
 
-Click `Save and Exit` to save the Pool configuration.
+Click `Save Origin Pool` to save the Pool configuration.
 
 ![Pool](./assets/xc_pool_save.png)
 
