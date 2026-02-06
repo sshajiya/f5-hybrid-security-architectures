@@ -1,6 +1,5 @@
-
 resource "aws_eip" "main" {
-  vpc              = true
+  domain = "vpc"
 }
 
 # Create NAT Gateway
