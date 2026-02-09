@@ -35,18 +35,15 @@ jobs:
             }
           }
           EOF
-
       - name: Terraform Init
-        id: init
         run: |
-          rm -rf .terraform
+          rm -rf .terraform .terraform.lock.hcl
           terraform init -upgrade
-          
-      
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+          cat .terraform/modules/modules.json
 
+      - name: Terraform Validate
+        run: terraform validate -no-color
+     
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
