@@ -37,8 +37,8 @@ jobs:
           EOF
       - name: Terraform Init
         run: |
-          
-          #rm -rf .terraform .terraform.lock.hcl
+          sed -i 's/^\(\s*\)vpc\s*=\s*true/\1domain = "vpc"/' bigip_base/main.tf
+          rm -rf .terraform .terraform.lock.hcl
           terraform init -upgrade
           #cat .terraform/modules/modules.json
 
