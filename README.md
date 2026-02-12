@@ -134,7 +134,9 @@ Examples deployments utilizing F5 Applicaton Delivery and Security Platform solu
 **STEP 6:** Once the pipeline completes, verify your assets were deployed or destroyed based on your workflow. From F5 XC console, you can check if the F5 XC load balancer has come to active.
             **NOTE:**  The autocert process takes time.  It may be 5 to 10 minutes before Let's Encrypt has provided the cert.
 
-
+## Version Notes
+For latest versions of aws and bigip modules do the code changes accordingly
+for deploy-xc-bigip, under infra->networks.tf change the version to >=4, bigip-base-> bigip.tf change the version to 1.2.6 ,juice-shop --> network.tf modify the aws_eip resource as domain = "vpc" instead of vpc = true. 
 ## Development
 
 Outline any requirements to setup a development environment if someone would like to contribute.  You may also link to another file for this information.
