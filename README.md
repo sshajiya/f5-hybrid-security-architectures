@@ -139,6 +139,11 @@ Examples deployments utilizing F5 Applicaton Delivery and Security Platform solu
 
 Outline any requirements to setup a development environment if someone would like to contribute.  You may also link to another file for this information.
 
+## Debug Notes on Latest version changes
+
+For latest versions of aws and bigip modules do the code changes accordingly for deploy-xc-bigip, under infra->networks.tf change the version to >=4, bigip-base-> bigip.tf change the version to 1.2.6 ,juice-shop --> network.tf modify the aws_eip resource as domain = "vpc" instead of vpc = true.
+Please do the same changes under destroy-xc-bigip branch as well.
+
 ## Support
 
 For support, please open a GitHub issue.  Note, the code in this repository is community supported and is not supported by F5 Networks.  
